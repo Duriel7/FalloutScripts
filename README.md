@@ -8,5 +8,5 @@ voudraient reproduire mes mods dans leur jeu.
 English : 
 Just a random bunch of my scripts for Fallout 3 and New Vegas.
 This repo will contain these scripts and their applications, as well as instructions 
-to put them in shape et commentaries explaining the logic, for those 
+to put them in shape and commentaries explaining the logic, for those 
 who would want to reproduce my mods in their game.
