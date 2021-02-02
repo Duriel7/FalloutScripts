@@ -1,0 +1,19 @@
+scn 0DurielRegenScript
+
+; declare variables needed
+
+float DurielRegen			      ; receive the base regeneration value
+float DurielRegenMult		    ; receive the value multiplier
+short Endu					        ; take and stock Endurance stat at the moment
+float EnduMult				      ; multiplier of Endurance value
+
+begin ScriptEffectUpdate
+
+	set Endu to player.GetAV Endurance					         	; stocking the Endurance value at the moment
+	set EnduMult to (1 + (Endu/5))							          ; set the multiplier
+	
+	set DurielRegen to ScriptEffectElapsedSeconds / 180		; set the base value to a 180 seconds waiting effect
+	set DurielRegenMult to DurielRegen * EnduMult			    ; set the total multiplier to base value * Endurance multiplier
+	RestoreAv Health DurielRegenMult						          ; put the effect on player character
+		
+end
