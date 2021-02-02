@@ -1,5 +1,5 @@
 # FalloutScripts
-<u>French : </u>
+French : 
 Juste un regroupement aléatoire de tous mes scripts pour Fallout 3 et New Vegas.
 Le répertoire contiendra les scripts et leur applications ainsi que les instructions 
 pour les mettre en application et des commentaires expliquant la logique, pour ceux 
