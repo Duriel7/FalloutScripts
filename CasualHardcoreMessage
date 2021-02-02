@@ -1,0 +1,68 @@
+#####################################################
+Original script :
+#####################################################
+ScriptName VCG01CasualHardcoreMessageSCRIPT
+
+short nButton
+short bModeSet;
+
+BEGIN OnActivate
+	ShowMessage VCG01CasualHardcoreMessage 1
+END
+
+BEGIN GameMode
+
+	set nButton to GetButtonPressed
+	if (nButton >= 0 && bModeSet == 0)
+		if ( nButton == 1)
+			SetHardcore 1;
+		else
+			SetHardcore 0;
+		endif
+		set bModeSet to 1;
+		MarkForDelete;
+	endif
+
+END
+#####################################################
+My modified script :
+#####################################################
+ScriptName VCG01CasualHardcoreMessageSCRIPT
+
+; normally the original script will just present a message asking you for hardcore mode activation
+; you click yes or no
+; my script will also present you my new mechanics for enhanced hardcore gameplay when you click yes
+
+short nButton
+short bModeSet;
+int Endu												; variable to receive permanent Endurance stat
+int StartingHP											; variable to receive the new amount of base HP of a character
+int BaseHP												; variable which corresponds to the base HP of a starting character
+
+BEGIN OnActivate
+	ShowMessage VCG01CasualHardcoreMessage 1
+END
+
+BEGIN GameMode
+
+	set nButton to GetButtonPressed
+	if (nButton >= 0 && bModeSet == 0)
+		if ( nButton == 1)
+			SetHardcore 1;
+			ShowMessage 0DurielNatRegenMessage 1		; show my message explaining calculation of starting HP and health regeneration
+			player.addperk aaaDurielRegenPerk;			; add my HP regeneration perk
+			set Endu to player.GetPermAV Endurance		; stocking the permanent Endurance stat into my variable
+			set StartingHP to (50 + (Endu * 10))		; calculation of starting HP amount based on Endurance stat
+			set BaseHP to (-1) * (100 + (Endu * 20))	; calculation of starting vanilla HP amount based on dev' original equation
+			player.modav health StartingHP				; adding my HP amount to the normal amount before
+			player.modav health BaseHP					; removing the original amount after
+		else
+			SetHardcore 0;
+		endif
+		set bModeSet to 1;
+		Disable
+		MarkForDelete;
+	endif
+
+END
+####################################################
