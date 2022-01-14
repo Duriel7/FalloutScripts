@@ -1,0 +1,22 @@
+scn 0DurielRebreatherScript
+
+;variable for item equipping
+int iEquipped
+
+;when equipping spell for unlimited breathing time underwater is added and variable is set to 1
+begin OnEquip player
+	player.AddSpell VMS15WaterBreathingActual
+	set iEquipped to 1
+end
+;commented part of code because it does not work as is
+;begin onUnequip player
+;	player.RemoveSpell VMS15WaterBreathingActual
+;end
+
+;when playing if the rebreather is unequipped the spell is removed ans the variable is reset to 0
+begin GameMode
+	if iEquipped == 1 && Player.GetEquipped aaaDurielRebreather == 0
+		player.RemoveSpell VMS15WaterBreathingActual
+		set iEquipped to 0
+	endif
+end
