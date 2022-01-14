@@ -1,0 +1,48 @@
+scn 0DurielNormalRangerCateyeEffect
+
+;Declare short variables to store boolean values
+short bIsNPressed
+short bControlVar
+short bEquipped
+
+;Begin the script effect when equipping the item
+begin OnEquip
+
+set bEquipped to 1
+
+end
+
+;Gamemode will launch the script effect after equipping or unequipping item
+Begin GameMode
+	if bIsNPressed != IsKeyPressed 49                                   ;if function to properly detect if N - for Nighteye - letter is pressed or not
+		set bIsNPressed to IsKeyPressed 49                                ;setting the key 49 pressed to the right state of the key
+		if bIsNPressed                                                    ;when pressing N code tests for equipped item
+			if bEquipped                                                    ;if function to control if helmet is equipped or not
+				if bControlVar == 0                                           ;if control variable is zero it activates the nighteye
+					ApplyImageSpaceModifier AAADurielNormalRangerCatEyeISFX     ;ISM applied
+					player.setav Nighteye 1                                     ;applies nighteye effect
+					PlaySound UIPipBoyMode                                      ;plays a little sound effect
+					set bControlVar to 1                                        ;puts the control variable to one
+				elseif bControlVar == 1                                       ;if control variable is one it deactivates the nighteye
+					RemoveImageSpaceModifier AAADurielNormalRangerCatEyeISFX    ;ISM removed
+					player.setav Nighteye 0                                     ;removes nighteye
+					PlaySound UIPipBoyLightOff                                  ;plays little sound effect
+					set bControlVar to 0                                        ;resets control variable to zero
+				endif
+			else
+				showMessage AAADurielNoNightVision                            ;if helmet unequipped a message is shown to tell player that they need to equip it
+			endif
+		endif
+	endif
+End
+
+;Shuts down script effect if unequipping the item
+begin OnUnEquip
+
+RemoveImageSpaceModifier AAADurielNormalRangerCatEyeISFX
+player.setav Nighteye 0
+set bEquipped to 0
+PlaySound UIPipBoyLightOff                                            ;plays little sound effect when equipping
+set bControlVar to 0                                                  ;automagically resets control variable simulating you switching off before unequipping
+
+end
