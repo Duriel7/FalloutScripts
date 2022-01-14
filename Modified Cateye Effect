@@ -1,0 +1,11 @@
+scn 0DurielCateyeEffect
+
+begin OnEquip
+	ApplyImageSpaceModifier AAADurielCatEyeISFX     ;Apply an image space modifier that I created (RGBA 220;220;10;25)
+	player.setav Nighteye 1                         ;Turn on Nighteye value by setav when equipping the glasses
+end
+
+begin OnUnEquip
+	RemoveImageSpaceModifier AAADurielCatEyeISFX    ;Remove image space modifier
+	player.setav Nighteye 0                         ;Turn off Nighteye value
+end
