@@ -1,0 +1,91 @@
+scn 0DurielPoweredRangerCateyeEffect
+
+;Declare variables short for boolean and float for timer
+short bIsNPressed
+short bControlVar
+short bPower                                                         ;power is the power control variable that is made to detect if nightvision is simple or powerful
+short bEquipped
+short bNHeld
+float fTimer
+
+begin OnEquip
+
+	set bEquipped to 1
+
+end
+
+
+Begin GameMode
+
+	if fTimer > 0                                                       ;testing if press time is more than 0 seconds
+		set fTimer to fTimer - GetSecondsPassed                           ;if yes then timer is set to timer - time passed when key pressed
+	elseif bIsNPressed > bNHeld                                         ;if key pressed more than needed held detector is set to one
+		set bNHeld to 1
+		if bEquipped                                                      ;if item equipped function activates
+			if bPower == 0                                                  ;power is zero so power nightvision is off
+				if bControlVar == 0                                           ;control variable is zero so normal nightvision is also off
+					ApplyImageSpaceModifier AAADurielPoweredRangerCatEyeISFX
+					player.setav Nighteye 1
+					PlaySound UIPipBoyLightOn
+					set bPower to 1                                             ;power control becomes one
+				elseif bControlVar == 1                                       ;control var is one so it means normal nightvision was on
+					RemoveImageSpaceModifier AAADurielNormalRangerCatEyeISFX
+					ApplyImageSpaceModifier AAADurielPoweredRangerCatEyeISFX    ;turns off normal nightvision and turns on power nightvision
+					PlaySound UIPipBoyLightOn
+					set bPower to 1                                             ;power control becomes one
+					set bControlVar to 0                                        ;turns off normal control var because it is not needed anymore
+				endif
+			else                                                            ;else if power was on it turns it off completely
+				RemoveImageSpaceModifier AAADurielPoweredRangerCatEyeISFX
+				player.setav Nighteye 0
+				PlaySound UIPipBoyLightOff
+				set bPower to 0
+			endif
+		else
+			showMessage AAADurielNoNightVision
+		endif
+	endif
+
+	if bIsNPressed != IsKeyPressed 49                                   ;same code than normal nightvision
+		set bIsNPressed to IsKeyPressed 49
+		if bIsNPressed                                                    ;though this time, timer counts the time passed when N is pressed
+			set fTimer to 0.8                                               ;when N is pressed timer is set to 800 milliseconds and bNHeld to zero
+			set bNHeld to 0
+		elseif fTimer > 0                                                 ;if N is pressed for a longer time then timer is reset to zero
+			set fTimer to 0
+			if bEquipped                                                    ;same tests than before for equipping state and power state
+				if bControlVar == 0
+					if bPower                                                   ;if power nightvision is on then it is turned off and normal nightvision is turned on
+						RemoveImageSpaceModifier AAADurielPoweredRangerCatEyeISFX
+						set bPower to 0
+						player.setav Nighteye 0
+					endif
+					ApplyImageSpaceModifier AAADurielNormalRangerCatEyeISFX
+					player.setav Nighteye 1
+					PlaySound UIPipBoyMode
+					set bControlVar to 1
+				elseif bControlVar == 1
+					RemoveImageSpaceModifier AAADurielNormalRangerCatEyeISFX
+					player.setav Nighteye 0
+					PlaySound UIPipBoyLightOff
+					set bControlVar to 0
+					set bPower to 0
+				endif
+			else
+				showMessage AAADurielNoNightVision                             ;shows message if item is not equipped
+			endif
+		endif
+	endif
+
+End
+
+begin OnUnEquip
+
+	RemoveImageSpaceModifier AAADurielNormalRangerCatEyeISFX
+	RemoveImageSpaceModifier AAADurielPoweredRangerCatEyeISFX
+	set bControlVar to 0
+	set bPower to 0
+	player.setav Nighteye 0
+	set bEquipped to 0
+
+end
